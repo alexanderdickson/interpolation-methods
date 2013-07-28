@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <title>Interpolation methods</title>
+    <style>
+    	body {
+    		font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+    	}
+
+    	body > p {
+    		font-size: 10px;
+    	}
+
+    	canvas {
+    		border: 5px solid #eee;
+    	}
+
+    	form {
+    		font-size: 12px;
+    	}
+
+    	form fieldset {
+    		border: 0;
+    		padding: 0;
+    	}
+
+		form fieldset legend {
+    		float: left;
+			font-weight: bold;
+			margin-right: 5px;
+			line-height: 20px;
+		}
+
+    	form ul {
+    		float: left;
+    		list-style: none;
+    		padding: 0;
+    		margin: 0 10px 0 0;
+    	}
+
+    	form ul li {
+    		display: inline-block;
+    	}
+
+    	form ul li input {
+    		margin-right: 5px;
+    	}
+    </style>
+  </head>
+  <body>
+  		<h1>Interpolation Methods</h1>
+
+  		<form>
+  			<p>Click the canvas to place a point. Points can be dragged after being placed.</p>
+	  		<fieldset>
+	  			<legend>Interpolation method for Y</legend>
+	  			<ul>
+		  			<li>
+			  			<input type="radio" name="interpolate" id="linear" value="linear" checked />
+			  			<label for="linear">Linear</label>
+		  			</li>
+		  			<li>
+			  			<input type="radio" name="interpolate" id="cosine" value="cosine" />
+			  			<label for="cosine">Cosine</label>
+		  			</li>
+		  			<li>
+			  			<input type="radio" name="interpolate" id="cubic" value="cubic" />
+			  			<label for="cubic">Cubic</label>
+		  			</li>
+		  			<li>
+			  			<input type="radio" name="interpolate" id="hermine" value="hermine" />
+			  			<label for="hermine">Hermine</label>
+		  			</li>		  			
+	  			</ul>
+
+	  			<button type="button" id="clear">Clear</button>
+	  			<button type="button" id="random">Random</button>
+
+	  		</fieldset>
+  		</form>
+
+  		<canvas width="600" height="600"></canvas>
+
+  		<p>By <a href="http://alexanderdickson.com">Alexander Dickson</a>.</p>
+
+	   <script src="bundle.js"></script>
+
+  </body>
+ </html>
