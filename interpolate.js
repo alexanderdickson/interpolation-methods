@@ -35,26 +35,44 @@ demo.render = function(dt) {
 	var getSiblingPoint = this.getSiblingPoint;
 	var getComponent = this.getComponent;
 
+	if ( ! points.length) {
+		return;
+	}
+
 	var getPointFn = function(component, index, offset) { 
 		var sibling = this.getSiblingPoint(index, offset);
 		return sibling === undefined ? null : getComponent(component, sibling); 
 	};
+	
+	ctx.moveTo(points[0][0], points[0][1]);
 
 	points.forEach(function(point, j){
 		var nextPoint = points[j + 1];
+		var distanceBetween;
+		var distanceRemaining;
+		var sign;
+		var m;
+		var x;
+		var y;
+
+		ctx.strokeStyle = "#ccc";
+		ctx.beginPath();
 	
 		if (nextPoint) {
-			var distance = distanceFn(point, nextPoint);
-			var distanceBetweenDraws = 1;
-			var step = (distanceBetweenDraws / distance);
+			distanceBetween = distanceRemaining = nextPoint[0] - point[0];
+			sign = distanceBetween > 0 ? 1 : -1;
+			ctx.lineTo(point[0] - radius, point[1] - radius);
+			do {
+				distanceRemaining -= 2 * sign;
+				m = 1 - (distanceRemaining / distanceBetween);
+				x = linearInterpolateFn(getPointFn.bind(this, "x", j), m);
+				y = interpolateFn(getPointFn.bind(this, "y", j), m);
+				ctx.lineTo(x - radius, y - radius);
+			} while (Math.abs(distanceRemaining) > 0 && m < 1);	
+		} 
 
-			ctx.fillStyle = "#ccc";
-			for (var i = 0; i < 1; i += step) {		
-				var x = linearInterpolateFn(getPointFn.bind(this, "x", j), i);
-				var y = interpolateFn(getPointFn.bind(this, "y", j), i);
-				ctx.fillRect(x - radius, y - radius, 1, 1);
-			}
-		}
+		ctx.stroke();
+		ctx.closePath();
 
 		// Mark the point.
 		ctx.fillStyle = "#000";
@@ -101,7 +119,7 @@ demo.interpolateFns = {
 		var m1 = (c - b) * (1 + bias) * (1 - tension) / 2 + (d - c) * (1 - bias) * (1 - tension) / 2;
 		var mu2 = Math.pow(m, 2); 
 		var mu3 = mu2 * m;
-		var a0 = 2 * mu3 - 3 * mu3 + 1;
+		var a0 = 2 * mu3 - 3 * mu2 + 1;
 		var a1 = mu3 - 2 * mu2 + m;
 		var a2 = mu3 - mu2;
 		var a3 = -2 * mu3 + 3 * mu2;
@@ -124,7 +142,6 @@ demo.random = function () {
 		x = (Math.random() * (this.canvas.width / 10)) + ((this.canvas.width / 10) * i);
 		y = (Math.random() * this.canvas.height);
 		this.points.push([x, y]);
-		console.log(x,y)
 	}
 };
 
@@ -174,14 +191,13 @@ demo.pointPlacer = function() {
 		}
 
 		var coords = getCoords(event);
-		var collision = ! this.points.some(function(point, index) {
+		var collision = this.points.some(function(point, index) {
 			activePointIndex = index;
 			return pointCollision(point, coords);
 		});
 
-		if (collision) {
+		if ( ! collision) {
 			activePointIndex = null;
-			return;
 		}
 
 	}.bind(this));
@@ -215,7 +231,3 @@ demo.pointPlacer = function() {
 };
 
 demo.init();
-
-
-
-

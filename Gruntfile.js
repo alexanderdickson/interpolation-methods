@@ -4,11 +4,11 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    pkg: '<json:package.json>',
+    pkg: grunt.file.readJSON('package.json'),
     concat: {
       options: {
         stripBanners: true,
-         banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - '
+         banner: '/*! <%= pkg.name %> - <%= pkg.author %> */'
       },
       dist: {
         src: 'bundle.js',
@@ -55,6 +55,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
 
+  grunt.registerTask('observe', ['concat', 'browserify']);
   // Default task.
   grunt.registerTask('default', ['jshint', 'browserify', 'concat', 'uglify']);
 
